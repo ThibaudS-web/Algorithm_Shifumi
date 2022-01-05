@@ -7,4 +7,4 @@
 ```
 node app.js -p <playerOneName> -ia <playerTwoName>
 ```
-
+Using node v14.0.0
