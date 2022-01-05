@@ -20,26 +20,26 @@ let scoreIATwo = 0
 
 function readInput(playerName) {
     return new Promise(function (resolve, reject) {
-        rl.question(`Tu joues quoi ${playerName} ?` , (userInput) => {
+        rl.question(`Tu joues quoi ${playerName} ?\n`, (userInput) => {
             resolve(userInput)
         })
     })
 }
 
-async function battle(playerOneIA, playerTwoIA) {
+async function battle(playerOneIA, playerOneName, playerTwoIA, playerTwoName) {
     let figureA
     let figureB
 
-    if(playerOneIA) {
+    if (playerOneIA) {
         figureA = randomPick()
     } else {
-        figureA = await readInput('Billy')
+        figureA = await readInput(playerOneName)
     }
 
-    if(playerTwoIA) {
+    if (playerTwoIA) {
         figureB = randomPick()
     } else {
-        figureB = await readInput('Didier')
+        figureB = await readInput(playerTwoName)
     }
 
     if (figureA !== 'Rock' && figureA !== 'Paper' && figureA !== 'Scissors') {
@@ -51,65 +51,67 @@ async function battle(playerOneIA, playerTwoIA) {
         return
     }
 
-    console.log("IA ONE joue: ", figureA)
-    console.log("IA TWO joue: ", figureB)
+    console.log(`${playerOneName} joue: `, figureA)
+    console.log(`${playerTwoName} joue: `, figureB)
 
     if (figureA === 'Paper' && figureB === 'Rock') {
-        console.log("L'IA ONE Gagne !")
+        console.log(`${playerOneName} gagne !`)
         scoreIAOne++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
     else if (figureA === 'Paper' && figureB === 'Scissors') {
-        console.log("L'IA TWO Gagne !")
+        console.log(`${playerTwoName} gagne !`)
         scoreIATwo++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
     else if (figureA === 'Paper' && figureB === 'Paper') {
         console.log('Egalité !')
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
 
     else if (figureA === 'Rock' && figureB === 'Scissors') {
-        console.log("L'IA ONE Gagne !")
+        console.log(`${playerOneName} gagne !`)
         scoreIAOne++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
     else if (figureA === 'Rock' && figureB === 'Paper') {
-        console.log("L'IA TWO Gagne !")
+        console.log(`${playerTwoName} gagne !`)
         scoreIATwo++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
-
     }
     else if (figureA === 'Rock' && figureB === 'Rock') {
         console.log('Egalité !')
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
 
     else if (figureA === 'Scissors' && figureB === 'Paper') {
-        console.log("L'IA ONE Gagne !")
+        console.log(`${playerOneName} gagne !`)
         scoreIAOne++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
     else if (figureA === 'Scissors' && figureB === 'Rock') {
-        console.log("L'IA TWO Gagne !")
+        console.log(`${playerTwoName} gagne !`)
         scoreIATwo++
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
     }
     else if (figureA === 'Scissors' && figureB === 'Scissors') {
         console.log('Egalité !')
-        console.log("Score : IA ONE: ", scoreIAOne, " ET IA TWO: ", scoreIATwo)
+    }
+    console.log(`${playerOneName} a ${scoreIAOne} points et ${playerTwoName} a ${scoreIATwo} points`)
+}
+
+async function play(playerOneName, playerTwoName) {
+    while (scoreIAOne < 3 || scoreIATwo < 3) {
+        await battle(false, playerOneName, true, playerTwoName)
+        if (scoreIAOne === 3) {
+            return console.log(`GG ! ${playerOneName} GAGNE LE MATCH !`)
+        }
+        if (scoreIATwo === 3) {
+            return console.log(`GG ! ${playerTwoName} GAGNE LE MATCH !`)
+        }
     }
 }
 
-async function play() {
-    while (scoreIAOne < 3 || scoreIATwo < 3) {
-        await battle(false, false)
-        if (scoreIAOne === 3) {
-            return console.log('GG ! IA ONE GAGNE LE MATCH !')
-        }
-        if (scoreIATwo === 3) {
-            return console.log('GG ! IA Two GAGNE LE MATCH !')
-        }
-    }
+let playerOneName = 'PlayerOne'
+let playerTwoName = 'PlayerTwo'
+
+if(process.argv[2] != undefined) {
+    playerOneName = process.argv[2]
+} 
+if (process.argv[3] != undefined) {
+    playerTwoName = process.argv[3]
 }
-play()
+
+play(playerOneName, playerTwoName)
