@@ -92,9 +92,9 @@ async function battle(playerOneIA, playerOneName, playerTwoIA, playerTwoName) {
     console.log(`${playerOneName} a ${scoreIAOne} points et ${playerTwoName} a ${scoreIATwo} points`)
 }
 
-async function play(playerOneName, playerTwoName) {
+async function play(playerOneName, playerOneIsIA, playerTwoName, playerTwoIsIA) {
     while (scoreIAOne < 3 || scoreIATwo < 3) {
-        await battle(false, playerOneName, true, playerTwoName)
+        await battle(playerOneIsIA, playerOneName, playerTwoIsIA, playerTwoName)
         if (scoreIAOne === 3) {
             return console.log(`GG ! ${playerOneName} GAGNE LE MATCH !`)
         }
@@ -106,12 +106,21 @@ async function play(playerOneName, playerTwoName) {
 
 let playerOneName = 'PlayerOne'
 let playerTwoName = 'PlayerTwo'
+let playerOneIsIA = true
+let playerTwoIsIA = true
 
-if(process.argv[2] != undefined) {
-    playerOneName = process.argv[2]
+if(process.argv[2] === '-p') {
+    playerOneIsIA = false
 } 
-if (process.argv[3] != undefined) {
-    playerTwoName = process.argv[3]
+if(process.argv[4] === '-p') {
+    playerTwoIsIA = false
 }
 
-play(playerOneName, playerTwoName)
+if(process.argv[3] != undefined) {
+    playerOneName = process.argv[3]
+} 
+if (process.argv[5] != undefined) {
+    playerTwoName = process.argv[5]
+}
+
+play(playerOneName, playerOneIsIA, playerTwoName, playerTwoIsIA)
